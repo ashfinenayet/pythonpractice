@@ -1,11 +1,16 @@
+import calendar
 import pandas as pd
-df = pd.read_excel('/Users/ashfi/Documents/R projects/activity.xlsx')
+df = pd.read_excel('modified.xlsx')
 # print(df.tail(3))
 # print(df.columns)
 #print(df[['City/State', 'Category', 'Country']])
-df['year'] = (pd.DatetimeIndex(df['Date']).year)
-df['month'] = (pd.DatetimeIndex(df['Date']).month)
-
+#df['year'] = (pd.DatetimeIndex(df['Date']).year)
+#df['month'] = (pd.DatetimeIndex(df['Date']).month)
+#df['date'] = print(pd.to_datetime(df['Date']))
+#df['Date'] = pd.to_datetime(df.Date, format='%m-%d-%Y')
 #print(df.loc[29, 'Category'])
 #print(df.sort_values(['Category', 'Amount'], ascending=[1,0]))
-print(df.head(5))
+#print(df.head(5))
+df.reset_index(inplace=True)
+df['month_name'] = df['month'].apply(lambda x: calendar.month_abbr[x])
+df.to_excel('modified2.xlsx', index=False)
