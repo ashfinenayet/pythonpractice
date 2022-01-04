@@ -13,7 +13,8 @@ colors = {
 # see https://plotly.com/python/px-arguments/ for more options
 df = pd.read_excel('modified2.xlsx')
 
-fig = px.histogram(df, x="Category", y="Amount", color = 'Category', title='Spending by Category',)
+fig = px.histogram(df, x="Category", y="Amount",
+                   color='Category', title='Spending by Category',)
 fig_2 = px.pie(df, values='Amount', names='Category',
                color='Category', title='Percentage of Spending', template="plotly_dark").update_layout(
     {"plot_bgcolor": "rgba(0, 0, 0, 0)", "paper_bgcolor": "rgba(0, 0, 0, 0)"}
@@ -21,10 +22,25 @@ fig_2 = px.pie(df, values='Amount', names='Category',
 fig_2.update_traces(textposition='inside', textinfo='percent+label')
 fig_3 = px.line(df, x='Date', y='Amount', title='Time Progession of Spending', template="plotly_dark").update_layout(
     {"plot_bgcolor": "rgba(0,0,0,0)", "paper_bgcolor": "rgba(0,0,0,0)"})
-fig_4 = px.box(df, x='Category', y='Amount', color='Category', title= 'boxplot graph', template="plotly_dark").update_layout(
+fig_4 = px.box(df, x='Category', y='Amount', color='Category', title='boxplot graph', template="plotly_dark").update_layout(
     {"plot_bgcolor": "rgba(0,0,0,0)", "paper_bgcolor": "rgba(0,0,0,0)"})
 
 fig.update_layout(
+    plot_bgcolor=colors['background'],
+    paper_bgcolor=colors['background'],
+    font_color=colors['text']
+)
+fig_2.update_layout(
+    plot_bgcolor=colors['background'],
+    paper_bgcolor=colors['background'],
+    font_color=colors['text']
+)
+fig_3.update_layout(
+    plot_bgcolor=colors['background'],
+    paper_bgcolor=colors['background'],
+    font_color=colors['text']
+)
+fig_4.update_layout(
     plot_bgcolor=colors['background'],
     paper_bgcolor=colors['background'],
     font_color=colors['text']
