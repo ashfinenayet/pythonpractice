@@ -2,16 +2,17 @@
 import dash
 from dash import dcc
 from dash import html
+from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
-app = dash.Dash(__name__)
+
 colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
-df = pd.read_excel('modified2.xlsx')
+df = pd.read_excel('personal_expenditures/modified2.xlsx')
 
 fig = px.histogram(df, x="Category", y="Amount",
                    color='Category', title='Spending by Category',)
@@ -45,6 +46,8 @@ fig_4.update_layout(
     paper_bgcolor=colors['background'],
     font_color=colors['text']
 )
+app = dash.Dash(__name__)
+figures = ['fig', 'fig_2', 'fig_3', 'fig_4']
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
     html.H1(
         children='Personal Expenditures in USD',
@@ -64,22 +67,15 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     ),
 
     dcc.Graph(
-        id='bar',
-        figure=fig
+        id='plot',
+        
+    ),
+    dcc.Dropdown(
+        id='variables',
+        options=[{'label': i, 'value': i}for i in figures],
+        value=figures[0]
     ),
 
-    dcc.Graph(
-        id='pie_chart',
-        figure=fig_2
-    ),
-    dcc.Graph(
-        id='line_chart',
-        figure=fig_3
-    ),
-    dcc.Graph(
-        id='boxplot',
-        figure=fig_4
-    ),
     html.P(children='I have no idea why clothing shows up twice as separate categories',
            style={
                'textAlign': 'center',
@@ -87,6 +83,27 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
            })
 
 ])
+@app.callback(
+    Output('plot', 'figure'),
+    [Input('variables', 'value')])
+def update_graph(fig_name):
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
+    if fig_name == 'bar graph':
+#         fig=go.Figure(go.Scatter(x=[1,2,3], y = [3,2,1]))
+        return fig
+
+
+    if fig_name == 'pie graph':
+#         fig=go.Figure(go.Bar(x=[1,2,3], y = [3,2,1]))
+        return fig_2
+        
+    if fig_name == 'line graph':
+#         fig=go.Figure(go.Bar(x=[1,2,3], y = [3,2,1]))
+        return fig_3
+    if fig_name == 'box plot':
+        return fig_4
+        
+# app.run_server(mode='external', debug=True)
+app.run_server(debug=True,
+           use_reloader=False # Turn off reloader if inside Jupyter
+          )  
